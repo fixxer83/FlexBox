@@ -1,0 +1,10 @@
+1391955278836	Rename package 'Product'
+1391955304803	Rename package 'GUI'
+1391955324575	Rename package 'Testing'
+1391955610788	Encapsulate field 'grade'
+1391955616127	Encapsulate field 'costPerM'
+1391955729735	Rename type 'ColoourPrintOption'
+1391960646073	Delete element
+1391982546637	Rename local variable 'myFile'
+1391986390484	Rename local variable 'boxes'
+1391986680373	Rename local variable 'bt'

@@ -1,0 +1,369 @@
+package graphicalUserInterface;
+
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+import customers.UserClass;
+import fileIO.FileOperations;
+
+public class UserScreen implements ActionListener {
+	
+	FileOperations fio;
+	UserClass uc;
+	Container userContainer = new Container();
+	
+	//Components
+	JLabel firstNameLbl  = new JLabel("First Name:    ");
+	JTextField firstNameTxt  = new JTextField();
+	
+	JLabel lastNameLbl  = new JLabel("Last Name:    ");
+	JTextField lastNameTxt  = new JTextField();
+	JLabel addressLbl  = new JLabel("Address:    ");
+	JTextArea addressTxt  = new JTextArea();
+	JLabel contactNumLbl  = new JLabel("Contact Number:    ");
+	JTextField contactNumTxt  = new JTextField();
+	JLabel usernameLbl  = new JLabel("Username:    ");
+	JTextField usernameTxt  = new JTextField();
+	JLabel passwordLbl  = new JLabel("Password:    ");
+	JTextField visiblePasswordTxt  = new JTextField();
+	JPasswordField passwordTxt  = new JPasswordField();
+	JLabel confirmPasswordLbl  = new JLabel("Confirm Password:    ");
+	JPasswordField confirmPasswordTxt  = new JPasswordField();
+	JLabel adminLbl  = new JLabel("Set as Administrator:    ");
+	JComboBox adminDD  = new JComboBox();
+	Border border = BorderFactory.createLineBorder(Color.GRAY);
+
+	JButton addNewUserBtn = new JButton("Add New User");
+	
+	JButton resetBtn = new JButton("Reset");
+	
+	//Accessors & mutators
+	public String getFirstNameTxt() {
+		return firstNameTxt.getText();
+	}
+
+	public void setFirstNameTxt(String firstNameTxt) {
+		this.firstNameTxt.setText(firstNameTxt);
+	}
+
+	public String getLastNameTxt() {
+		return lastNameTxt.getText();
+	}
+
+	public void setLastNameTxt(String lastNameTxt) {
+		this.lastNameTxt.setText(lastNameTxt);
+	}
+
+	public String getAddressTxt() {
+		return addressTxt.getText();
+	}
+
+	public void setAddressTxt(String addressTxt) {
+		this.addressTxt.setText(addressTxt);
+	}
+
+	public String getContactNumTxt() {
+		return contactNumTxt.getText();
+	}
+
+	public void setContactNumTxt(String contactNumTxt) {
+		this.contactNumTxt.setText(contactNumTxt);
+	}
+
+	public String getUsernameTxt() {
+		return usernameTxt.getText();
+	}
+
+	public void setUsernameTxt(String usernameTxt) {
+		this.usernameTxt.setText(usernameTxt);
+	}
+
+	public String getVisiblePasswordTxt() {
+		return visiblePasswordTxt.getText();
+	}
+	
+	public void setVisiblePasswordTxt(String visiblePassword) {
+		visiblePasswordTxt.setText(visiblePassword);
+	}
+	
+	public void setPasswordTxt(String passwordTxt) {
+		this.passwordTxt.setText(passwordTxt);
+	}
+	
+	public String getPasswordTxt() {
+		char[] passwordChars = passwordTxt.getPassword();
+		String password = new String(passwordChars);
+		return password;
+	}
+
+	public void setConfirmPasswordTxt(String confirmPasswordTxt) {
+		this.confirmPasswordTxt.setText(confirmPasswordTxt);
+	}
+	
+	public String getConfirmPasswordTxt() {
+		char[] passwordChars = confirmPasswordTxt.getPassword();
+		String password = new String(passwordChars);
+		return password;
+	}
+
+	//Dimensions
+	Dimension textBoxes = new Dimension(250, 40);
+	Dimension address = new Dimension(250, 90);
+	
+	public void addUsers(JPanel panel){
+		Font font = new Font("Verdana", Font.BOLD, 12);
+		userContainer.setLayout(new GridBagLayout());
+		
+		//Setting gridbag constraints for left and right components
+		GridBagConstraints leftSide = new GridBagConstraints();
+		leftSide.anchor = GridBagConstraints.WEST;
+		GridBagConstraints rightSide = new GridBagConstraints();
+		rightSide.ipadx = GridBagConstraints.HORIZONTAL;
+		rightSide.gridwidth = GridBagConstraints.REMAINDER;
+		
+		//Components Properties
+		firstNameLbl.setFont(font);
+		firstNameTxt.setPreferredSize(textBoxes);
+		firstNameTxt.setFont(font);
+		lastNameLbl.setFont(font);
+		lastNameTxt.setPreferredSize(textBoxes);
+		lastNameTxt.setFont(font);
+		addressLbl.setFont(font);
+		addressTxt.setPreferredSize(address);
+		addressTxt.setFont(font);
+		addressTxt.setLineWrap(true);
+		addressTxt.setBorder(border);
+		contactNumLbl.setFont(font);
+		contactNumTxt.setPreferredSize(textBoxes);
+		contactNumTxt.setFont(font);
+		usernameLbl.setFont(font);
+		usernameTxt.setFont(font);
+		usernameTxt.setPreferredSize(textBoxes);
+		visiblePasswordTxt.setPreferredSize(textBoxes);
+		visiblePasswordTxt.setFont(font);
+		passwordLbl.setFont(font);
+		passwordTxt.setPreferredSize(textBoxes);
+		confirmPasswordLbl.setFont(font);
+		confirmPasswordTxt.setPreferredSize(textBoxes);
+		adminLbl.setFont(font);
+		adminDD.setFont(font);
+		adminDD.setPreferredSize(textBoxes);
+		
+		addNewUserBtn.setPreferredSize(new Dimension(160, 40));
+		resetBtn.setPreferredSize(new Dimension(160, 40));
+		
+		//Adding component to the container
+		userContainer.add(firstNameLbl, leftSide);
+		userContainer.add(firstNameTxt, rightSide);
+		userContainer.add(lastNameLbl, leftSide);
+		userContainer.add(lastNameTxt, rightSide);
+		userContainer.add(addressLbl, leftSide);
+		userContainer.add(addressTxt, rightSide);
+		userContainer.add(contactNumLbl, leftSide);
+		userContainer.add(contactNumTxt, rightSide);
+		userContainer.add(usernameLbl, leftSide);
+		userContainer.add(usernameTxt, rightSide);
+		userContainer.add(passwordLbl, leftSide);
+		userContainer.add(visiblePasswordTxt, rightSide);
+		visiblePasswordTxt.setVisible(false);
+		userContainer.add(passwordTxt, rightSide);
+		userContainer.add(confirmPasswordLbl, leftSide);
+		userContainer.add(confirmPasswordTxt, rightSide);
+		
+		if(MainScreen.currentUser.isAdmin() == true){
+			userContainer.add(adminLbl, leftSide);
+			userContainer.add(adminDD, rightSide);
+			addNewUserBtn.setVisible(true);
+		
+		}else{
+			
+			addNewUserBtn.setVisible(false);
+			resetBtn.setVisible(false);
+			setFirstNameTxt(MainScreen.currentUser.getFirstName());
+			setLastNameTxt(MainScreen.currentUser.getLastName());
+			setAddressTxt(MainScreen.currentUser.getAddress());
+			setContactNumTxt(MainScreen.currentUser.getContactNumber());
+			setUsernameTxt(MainScreen.currentUser.getUsername());
+			setPasswordTxt(MainScreen.currentUser.getPassword());
+			firstNameTxt.setEnabled(false);
+			lastNameTxt.setEnabled(false);
+			addressTxt.setEnabled(false);
+			contactNumTxt.setEnabled(false);
+			usernameTxt.setEnabled(false);
+			visiblePasswordTxt.setVisible(true);
+			setVisiblePasswordTxt(getPasswordTxt());
+			visiblePasswordTxt.setEnabled(false);
+			passwordTxt.setVisible(false);
+			confirmPasswordLbl.setVisible(false);
+			confirmPasswordTxt.setVisible(false);
+			
+		}
+		userContainer.add(addNewUserBtn, leftSide);
+		userContainer.add(resetBtn, rightSide);
+		
+		//Adding action listeners
+		addNewUserBtn.addActionListener(this);
+		resetBtn.addActionListener(this);
+		
+		populateAdminDD();
+		panel.add(userContainer);
+	}
+	
+	public void populateAdminDD(){
+		if(adminDD.getItemCount() == 0){
+		adminDD.addItem("select");
+		adminDD.addItem("true");
+		adminDD.addItem("false");
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource() == addNewUserBtn){
+				uc = new UserClass();
+				
+				boolean value = uc.doesUserExist(getUsernameTxt(), getPasswordTxt());
+				if ((validateFirstNameValues() == false) || (validateLastNameValues() == false)){
+					JOptionPane.showMessageDialog(userContainer, "First Name and Last Name fields cannot contain numerical values," + 
+					"please correct prior procceding", "Invalid Values", JOptionPane.ERROR_MESSAGE);				
+				}else if(validateFields() == false){
+					//Error message (if any) is being thrown in validateFields()
+				}else if(validateContactNumber() == false){
+					JOptionPane.showMessageDialog(userContainer, "Your contact number must include numerical values only!",
+							"Invalid Values", JOptionPane.ERROR_MESSAGE);
+				}else{
+				
+				if(value == false){
+					UserClass thisUser = new UserClass();				
+					thisUser.setFirstName(getFirstNameTxt());
+					thisUser.setLastName(getLastNameTxt());
+					StringBuilder myAddress = new StringBuilder();
+					myAddress.append(getAddressTxt().replace(",", " "));
+					thisUser.setAddress(myAddress.toString());
+					thisUser.setContactNumber(getContactNumTxt());
+					thisUser.setUsername(getUsernameTxt());
+					thisUser.setPassword(getPasswordTxt());
+					thisUser.setAdmin(Boolean.valueOf(adminDD.getSelectedItem().toString()));
+					thisUser.setActive(true);
+					uc.addNewUser(thisUser);
+					
+					JOptionPane.showMessageDialog(userContainer, "User added successfully!", 
+							"Success", JOptionPane.INFORMATION_MESSAGE);
+					resetForm();
+				} else if (value != false){
+					JOptionPane.showMessageDialog(userContainer, "User already exists!", 
+							"User Already Exists", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+				
+		}else if(e.getSource() == resetBtn){
+			
+			resetForm();
+		}
+		
+	}
+	
+	/**
+	 * Validate that the first name text field
+	 * doesn't contain any numerical value
+	 * @return
+	 */
+	public boolean validateFirstNameValues(){
+		for(int i=0; i<getFirstNameTxt().length(); i++){
+			if(!Character.isLetter(getFirstNameTxt().charAt(i))){
+				return false;	
+			}	
+		}
+	
+		return true;
+	}
+
+	/**
+	 * Validate that the last name text field
+	 * doesn't contain any numerical value
+	 * @return
+	 */
+	public boolean validateLastNameValues(){
+		for(int i=0; i<getLastNameTxt().length(); i++){
+			if(!Character.isLetter(getLastNameTxt().charAt(i))){
+				return false;	
+			}	
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Verify if there are any empty fields
+	 * and if password fields match
+	 * @return
+	 */
+	public boolean validateFields(){
+		if((getFirstNameTxt().equals("")) || (getLastNameTxt().equals("")) || (getAddressTxt().equals("")) || (getContactNumTxt().equals(""))
+				|| (getUsernameTxt().equals("")) || (getPasswordTxt().equals("")) || (adminDD.getSelectedItem().equals("select"))){
+			
+			JOptionPane.showMessageDialog(userContainer, "All fields should have correct values please adjust and try again!", "Invalid Values", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+		
+		}else if(!getPasswordTxt().equals(getConfirmPasswordTxt())){
+			
+			JOptionPane.showMessageDialog(userContainer, "Password and Confirm Password values do not match!", "Passwords Don't Match", JOptionPane.ERROR_MESSAGE);
+			return false;
+		
+		}else{
+			return true;
+	  }
+	}
+	
+	/**
+	 * Validate contact number for
+	 * non-numerical characters
+	 * 
+	 * @return
+	 */
+	public boolean validateContactNumber(){
+		try  
+		  {  
+		    Double.parseDouble(getContactNumTxt());
+		    return true;
+		  }  
+		  catch(NumberFormatException nfe)  
+		  {  
+		    return false;  
+		  }    
+	}
+	
+	/**
+	 * This method may be used to reset all fields
+	 */
+	public void	resetForm(){
+		setFirstNameTxt("");
+		setLastNameTxt("");
+		setAddressTxt("");
+		setContactNumTxt("");
+		setUsernameTxt("");
+		setPasswordTxt("");
+		setConfirmPasswordTxt("");
+		adminDD.setSelectedIndex(0);
+	}
+
+}

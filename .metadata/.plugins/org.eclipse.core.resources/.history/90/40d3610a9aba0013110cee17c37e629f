@@ -1,0 +1,463 @@
+package product;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import javax.swing.JTextField;
+
+import fileIO.FileOperations;
+
+public class BoxType implements Factorable {
+	
+	//parameters
+	private String boxType, cardGrade;
+	private int colourOption;
+	private boolean reinfBottom, reinfCorn, sealableTop, isActive;
+	private double colourOptPercentage, reinfPercentage, sealablePercentage;
+	
+	public String PRODUCT_PATH = "Product/BoxType/boxTypes.csv";
+	public String DIRECTORY_PATH = "Product/BoxType";
+	
+	//Instantiating required classes
+	FileOperations fio;
+	
+	//Accessors and Mutators
+	public String getBoxType() {
+		return boxType;
+	}
+	public void setBoxType(String boxType) {
+		this.boxType = boxType;
+	}
+	
+	public String getCardGrade() {
+		return cardGrade;
+	}
+	public void setCardGrade(String cardGrade) {
+		this.cardGrade = cardGrade;
+	}
+	
+	public int getColourOption() {
+		return colourOption;
+	}
+	public void setColourOption(int colourOption) {
+		this.colourOption = colourOption;
+	}
+	
+	public double getColourOptionPercentage() {
+		return colourOptPercentage;
+	}
+	public void setColourOptionPercentage(double colourOptPercentage) {
+		this.colourOptPercentage = colourOptPercentage;
+	}
+	
+	public boolean isReinfBottom() {
+		return reinfBottom;
+	}
+	public void setReinfBottom(boolean reinfBottom) {
+		this.reinfBottom = reinfBottom;
+	}
+	
+	public boolean isReinfCorn() {
+		return reinfCorn;
+	}
+	public void setReinfCorn(boolean reinfCorn) {
+		this.reinfCorn = reinfCorn;
+	}
+	
+	public double getReinfPercentage() {
+		return reinfPercentage;
+	}
+	public void setReinfPercentage(double reinfPercentage) {
+		this.reinfPercentage = reinfPercentage;
+	}
+	
+	public boolean isSealableTop() {
+		return sealableTop;
+	}
+	public void setSealableTop(boolean sealableTop) {
+		this.sealableTop = sealableTop;
+	}
+	
+	public double getSealablePercentage() {
+		return sealablePercentage;
+	}
+	public void setSealablePercentage(double sealablePercentage) {
+		this.sealablePercentage = sealablePercentage;
+	}	
+	
+	public boolean getIsActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+	//Constructor
+	public BoxType(){
+		boxType = getBoxType();
+		cardGrade = getCardGrade();
+		colourOption = getColourOption();
+		colourOptPercentage = getColourOptionPercentage();
+		reinfBottom = isReinfBottom();
+		reinfCorn = isReinfCorn();
+		reinfPercentage = getReinfPercentage();
+		sealableTop = isSealableTop();
+		sealablePercentage = getSealablePercentage();
+		isActive = getIsActive();
+		
+		fio = new FileOperations();
+		fio.writeToFile(validateDefaultBoxTypes(), DIRECTORY_PATH, PRODUCT_PATH);
+	}
+	
+	//Overloaded constructor
+	public BoxType(String boxType, String cardGrade,
+			int colourOption, double colourOptPercentage, boolean reinfBottom, 
+			boolean reinfCorn, double reinfPercentage, boolean isActive)
+	{
+		this.boxType = boxType;
+		this.cardGrade = cardGrade;
+		this.colourOption = colourOption;
+		this.colourOptPercentage = colourOptPercentage;
+		this.reinfBottom = reinfBottom;
+		this.reinfCorn = reinfCorn;
+		this.reinfPercentage = reinfPercentage;
+		this.isActive = isActive;		
+	}
+	
+	/**
+	 * This method will be used to
+	 * add the initial data accordingly
+	 * 
+	 * @return ArrayList<Object>
+	 */
+	public ArrayList<Object> defaultBoxTypes(){
+		//ColourPrintOptions Properties
+		//All colour option types available in the ColourPrintOption enum
+		int[] colour = new int[]{ColourPrintOption.NoColour.getColOpt(), 
+				ColourPrintOption.OneColour.getColOpt(),ColourPrintOption.TwoColour.getColOpt()};
+		
+		//All colour option percentage cost available in the ColourPrintOption enum
+		double[] colPerc = new double[]{ColourPrintOption.NoColour.getPercentage(), 
+				ColourPrintOption.OneColour.getPercentage(),ColourPrintOption.TwoColour.getPercentage()};
+		
+		ArrayList<BoxType> boxes = new ArrayList<BoxType>();		
+		//Hardcoded initial box type values		
+		//Box Type | Grade | ColourPrintOption | ColourPrintOption% | ReinBottom | ReinfCorn | Reinf% | IsActive
+		boxes.add(new BoxType("1","1", colour[0], colPerc[0], false, false, 0.00, true));
+		boxes.add(new BoxType("1","2", colour[0], colPerc[0], false, false, 0.00, true));
+		boxes.add(new BoxType("1","3", colour[0], colPerc[0], false, false, 0.00, true));
+		boxes.add(new BoxType("2","2", colour[1], colPerc[1], false, false, 12.00, true));
+		boxes.add(new BoxType("2","3", colour[1], colPerc[1], false, false, 12.00, true));
+		boxes.add(new BoxType("2","4", colour[1], colPerc[1], false, false, 12.00, true));
+		boxes.add(new BoxType("3","2",colour[2], colPerc[2], false, false, 15.00, true));
+		boxes.add(new BoxType("3","3",colour[2], colPerc[2], false, false, 15.00, true));
+		boxes.add(new BoxType("3","4",colour[2], colPerc[2], false, false, 15.00, true));
+		boxes.add(new BoxType("3","5",colour[2], colPerc[2], false, false, 15.00, true));
+		boxes.add(new BoxType("4","2", colour[2], colPerc[2], true, false, 15.00, true));
+		boxes.add(new BoxType("4","3", colour[2], colPerc[2], true, false, 15.00, true));
+		boxes.add(new BoxType("4","4", colour[2], colPerc[2], true, false, 15.00, true));
+		boxes.add(new BoxType("4","5", colour[2], colPerc[2], true, false, 15.00, true));
+		boxes.add(new BoxType("5","3", colour[2], colPerc[2], true, true, 25.00, true));
+		boxes.add(new BoxType("5","4", colour[2], colPerc[2], true, true, 25.00, true));
+		boxes.add(new BoxType("5","5", colour[2], colPerc[2], true, true, 25.00, true));
+		
+		ArrayList<Object> btList = new ArrayList<Object>();
+		
+		for(int i=0; i < boxes.size(); i++){
+			btList.add(boxes.get(i).getBoxType() +"," + boxes.get(i).getCardGrade() 
+					+"," + boxes.get(i).getColourOption() + "," + boxes.get(i).getColourOptionPercentage()
+					+ "," + boxes.get(i).isReinfBottom() + "," + boxes.get(i).isReinfCorn() + "," 
+					+ boxes.get(i).getReinfPercentage() + "," + boxes.get(i).isActive + ", \n");	
+		}
+		return btList;
+	}
+	
+	/**
+	 * This method will check whether 
+	 * the default box types were created in the file
+	 * 
+	 * @return ArrayList<Object>
+	 */
+	public ArrayList<Object> validateDefaultBoxTypes(){
+		ArrayList<Object> btList = new ArrayList<Object>();
+		
+		if(getList(PRODUCT_PATH)==null){
+			btList.addAll(defaultBoxTypes());
+			
+			return btList;
+		}
+		
+		for(int i=0; i< defaultBoxTypes().size(); i++){
+			
+			if(defaultBoxTypes().get(i).equals(getList(PRODUCT_PATH).iterator())){
+			
+			}else{
+				btList.add(defaultBoxTypes().get(i));
+			}
+		}
+		
+		if(btList.size()<0){
+			return null;
+		}else{
+			return btList;
+		}
+	}
+	
+	@Override
+	public void addNew(ArrayList<Object> objList) {
+	}
+	
+	public ArrayList<Object> findMatchingBox(ArrayList<Object> myBox){
+		ArrayList<Object> test = new ArrayList<Object>();
+		FileOperations fileOperations = new FileOperations();
+		
+		Scanner scanner = new Scanner(DIRECTORY_PATH + "\\" + PRODUCT_PATH);
+		
+		scanner.useDelimiter(",");
+		
+		for(int i=0; i< fileOperations.readFromFile(DIRECTORY_PATH, PRODUCT_PATH).size(); i++){
+		
+		while (scanner.hasNext()) {
+			int counter = 0;
+			test.add(counter, scanner.next());
+			
+			counter++;
+		}
+	
+		}
+		return null;
+	}
+	
+	@Override
+	public ArrayList<Object> getList(String path) {
+		File dir = new File(DIRECTORY_PATH);
+		File myFile = new File(PRODUCT_PATH);
+		
+		if(dir.exists() != true){
+			try {
+				dir.mkdirs();
+				myFile.createNewFile();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+		}
+		
+		FileOperations fileOps = new FileOperations();
+
+		return fileOps.readFromFile(DIRECTORY_PATH, PRODUCT_PATH);
+	}
+	
+	@Override
+	public BoxType searchForBoxType(ArrayList<Object> objList) {
+		FileOperations fio = new FileOperations();
+		
+		//User selected box
+		BoxType userBox = new BoxType();
+		
+		for(int i=0; i<objList.size(); i++){
+			userBox.setCardGrade(objList.get(i).toString());
+			i++;
+			try{
+				userBox.setColourOption(Integer.parseInt(objList.get(i).toString()));
+			}catch(NumberFormatException e){
+				e.printStackTrace();
+			}
+			i++;
+			userBox.setReinfBottom(Boolean.valueOf(objList.get(i).toString()));
+			i++;
+			userBox.setReinfCorn(Boolean.valueOf(objList.get(i).toString()));
+			i++;
+			userBox.setSealableTop(Boolean.valueOf(objList.get(i).toString()));
+		}
+		
+		ArrayList<Object> readBoxes = fio.readFromFile(DIRECTORY_PATH, PRODUCT_PATH);
+		
+		for(int e = 1; e<readBoxes.size(); e++){
+			if(userBox.getCardGrade().equals(readBoxes.get(e).toString())){
+				e++;
+				if(String.valueOf(userBox.getColourOption()).equals(readBoxes.get(e).toString())){
+					e+=2;
+					if(String.valueOf(userBox.isReinfBottom()).equals(readBoxes.get(e).toString())){
+						e++;
+						if(String.valueOf(userBox.isReinfCorn()).equals(readBoxes.get(e).toString())){
+							return userBox;
+						}else{
+							e+=3;
+						}
+					}else{
+						e+=4;
+					}
+				}else{
+					e+=6;
+				}
+			}else{
+				e+=7;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public ArrayList<Object> searchForCardGrade(ArrayList<Object> objList,
+			String term) {
+		return null;
+	}
+	
+	/**
+	 * This method will be used to
+	 * calculate the volume of a box
+	 * by the user specified dimensions
+	 * 
+	 * @param length
+	 * @param width
+	 * @param height
+	 * @param cost
+	 * @param quantity
+	 * @return
+	 */
+	public String calcSurfaceAreaOfBox(double length, double width, double height, double cost, int quantity){
+		double surfaceArea = 2*(width * length) + 2*(length * height) + 2*(width * height);
+		double computedCost = cost * surfaceArea;
+		double totalCost = computedCost * quantity;
+	
+		DecimalFormat df = new DecimalFormat("##.##");
+		return df.format(totalCost);
+	}
+	
+	/**
+	 * This method may be used to add a
+	 * specified percentage to the cost
+	 * shown in a textfield
+	 * (i.e: add colour print percentage
+	 *  to the cost of the box)
+	 * 
+	 * @param textField
+	 * @param percent
+	 */
+	public void addPercentageToCost(JTextField textField, double percent){
+		//CardGrade Properties		
+		double origGradeCost = Double.valueOf(textField.getText());
+		
+		double sum = (origGradeCost * percent / 100) + origGradeCost; 
+
+		sum = Math.round(sum * 100);
+		sum = sum/100;
+		
+		textField.setText(String.valueOf(sum));
+	}	
+
+	/**
+	 * This method will compute the correct cost and the total cost
+	 * of box cost * quantity according to the parameters passed to it
+	 * 
+	 * @param cardGradeCost
+	 * @param colourOptPercent
+	 * @param reinfPercent
+	 * @param sealablePercent
+	 * @param qty
+	 * @param length
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public double returnBoxCost(double cardGradeCost, double colourOptPercent, double reinfPercent, double sealablePercent, int qty, double length, double width, double height){
+		double sum = cardGradeCost + (cardGradeCost * colourOptPercent / 100) + (cardGradeCost * reinfPercent / 100)
+				+ (cardGradeCost * sealablePercent / 100); 
+		
+		double computeTotal = 0;
+		DecimalFormat df = new DecimalFormat("##.##");
+		try{
+			computeTotal = Double.valueOf(calcSurfaceAreaOfBox(length, width, height, sum, qty));
+		
+			return Double.valueOf(df.format(computeTotal));
+		
+		}catch(NumberFormatException nme){
+			return 0.00;
+		}
+	}
+	
+	/**
+	 * This method will compute the correct cost according
+	 * to the parameters passed to it
+	 * 
+	 * @param cardGradeCost
+	 * @param colourOptPercent
+	 * @param reinfPercent
+	 * @param sealablePercent
+	 * @return
+	 */
+	public double returnBoxCost(double cardGradeCost, double colourOptPercent, double reinfPercent, double sealablePercent){
+		double sum = cardGradeCost + ((cardGradeCost * colourOptPercent) / 100) + ((cardGradeCost * reinfPercent) / 100)
+				+ ((cardGradeCost * sealablePercent) / 100); 
+		double computeTotal = 0.00;
+		
+		DecimalFormat df = new DecimalFormat("##.##");	
+		
+		try{
+			computeTotal = Double.valueOf(df.format(sum));
+			}catch(NumberFormatException nme){
+				
+			}
+		return computeTotal;
+	}
+	
+	/**
+	 * this method will compute the cost based on the given
+	 * parameters
+	 * 
+	 * @param cardGradeCost
+	 * @param colourOption
+	 * @param reinfBotOption
+	 * @param reinfCornOption
+	 * @param sealOption
+	 * @return
+	 */
+	public String returnBoxCost(double cardGradeCost, String colourOption, String reinfBotOption, 
+			String reinfCornOption, String sealOption){
+		double colOptPercent = 0.00;
+		double reinfPercent = 0.00;
+		double sealPercent = 0.00;
+		
+		if(colourOption.equals("2")){
+			colOptPercent = 15.00;
+		}else if(colourOption.equals("1")){
+			colOptPercent = 12.00;
+		}else{
+			colOptPercent = 0.00;
+		}
+		
+		if((reinfBotOption.equals("true")) && (reinfCornOption.equals("true"))){
+			reinfPercent = 17.00;
+		}else if((reinfBotOption.equals("true")) && (reinfCornOption.equals("false"))){
+			reinfPercent = 10.00;
+		}else if((reinfBotOption.equals("false")) && (reinfCornOption.equals("true"))){
+			reinfPercent = 7.00;
+		}else if((reinfBotOption.equals("true")) && (reinfCornOption.equals("select"))){
+			reinfPercent = 10.00;
+		}else if((reinfBotOption.equals("select")) && (reinfCornOption.equals("false"))){
+			reinfPercent = 7.00;
+		}else{
+			reinfPercent = 0.00;
+		}
+		
+		if(sealOption.equals("true")){
+			sealPercent = 5.00;
+		}else if(sealOption.equals("false")){
+			sealPercent = 0.00;
+		}else{
+			sealPercent = 0.00;
+		}
+		
+		double sum = cardGradeCost+((cardGradeCost*colOptPercent)/100) + ((cardGradeCost*reinfPercent)/100)
+				+ ((cardGradeCost*sealPercent)/100); 
+	
+		DecimalFormat df = new DecimalFormat("##.##");	
+		return df.format(sum);
+	}
+	
+	
+}

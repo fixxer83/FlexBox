@@ -1,0 +1,218 @@
+package product;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.JComboBox;
+
+import fileIO.FileOperations;
+
+public class CardGrade implements Factorable {
+
+	//parameters
+	private String grade;
+	private double costPerM;
+	private boolean isActive;
+	public String CG_DIR = "Product/CardGrade";
+	public String CG_PATH = "Product/CardGrade/cardGrades.csv";
+	
+	//Accessors and Mutators
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+	public double getCostPerM() {
+		return costPerM;
+	}
+	public void setCostPerM(double costPerM) {
+		this.costPerM = costPerM;
+	}
+	
+	public boolean getIsActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+	public CardGrade(){
+		
+		grade = getGrade();
+		costPerM = getCostPerM();
+		isActive = getIsActive();
+		
+		FileOperations fio = new FileOperations();
+		fio.writeToFile(validateDefaultCardGrade(), CG_DIR, CG_PATH);
+	}
+	
+	public CardGrade(String grade, double costPerM, boolean isActive){
+		
+		this.grade = grade;
+		this.costPerM = costPerM;
+		this.isActive = isActive;
+	}
+	
+	public double getCardGradeCost(JComboBox combo){
+		//CardGrade Properties		
+		CardGrade cg = new CardGrade();
+		double cost = 0;
+
+		for(int i=0; i< cg.getList(cg.CG_PATH).size(); i++){
+			
+			if(combo.getSelectedItem().equals(cg.getList(cg.CG_PATH).get(i))){
+				i++;
+				cost = Double.valueOf(cg.getList(cg.CG_PATH).get(i).toString());
+			}
+	}
+		return cost;
+	}
+	
+	public ArrayList<Object> defaultCardGrades(){	
+		
+		//Hardcoded initial card grade values
+		ArrayList<CardGrade> cgList = new ArrayList<CardGrade>();
+		
+		//CardGrade | CostPerMetre | isActive
+		cgList.add(new CardGrade("1", 0.45, true));
+		cgList.add(new CardGrade("2", 0.59, true));
+		cgList.add(new CardGrade("3", 0.68, false));
+		cgList.add(new CardGrade("4", 0.92, true));
+		cgList.add(new CardGrade("5", 1.30, true));
+		
+		ArrayList<Object> cardGrades = new ArrayList<Object>();	
+		
+		for(int i=0; i< cgList.size(); i++){
+		
+			cardGrades.add(cgList.get(i).getGrade() + "," + cgList.get(i).getCostPerM() + "," + cgList.get(i).getIsActive() + "," + "\n");
+		}
+		return cardGrades;
+	}
+	
+	/**
+	 * This method will check whether 
+	 * the default card grades were created in the file
+	 * 
+	 * @return ArrayList<Object>
+	 */
+	public ArrayList<Object> validateDefaultCardGrade(){
+		
+		//CardGrade cg = new CardGrade();
+		ArrayList<Object> cardGradeList = new ArrayList<Object>();
+		
+		if(getList(CG_PATH)==null){
+			cardGradeList.addAll(defaultCardGrades());
+			
+			return cardGradeList;
+		}
+		
+		for(int i=0; i< defaultCardGrades().size(); i++){
+			
+			if(defaultCardGrades().get(i).equals(getList(CG_PATH).iterator())){
+				
+			}else{
+				cardGradeList.add(defaultCardGrades().get(i));
+			}
+		}
+		
+		if(cardGradeList.size()<0){
+		
+			return null;
+		
+		}else{
+			
+			return cardGradeList;
+		}
+	}
+	
+	//Interface methods
+	
+	/**
+	 * This method may be used to
+	 * add a new card grade product,
+	 * to the existing file.
+	 */
+	@Override
+	public void addNew(ArrayList<Object> objList) {
+		FileOperations fio = new FileOperations();
+		
+		if(fio.readFromFile(CG_DIR, CG_PATH) != null){
+			objList.add(fio.readFromFile(CG_DIR, CG_PATH));
+		}
+		fio.writeToFile(objList, CG_DIR, CG_PATH);
+	}
+
+	@Override
+	public ArrayList<Object> searchForCardGrade(ArrayList<Object> objList, String term) {
+		//String grade;
+		
+		//Trying to throw a custom exception if array list is empty
+		if(objList.size() <= 0){
+			throw new ArrayIndexOutOfBoundsException();
+		}
+		
+		CardGrade cg;
+		
+		for(int i=0; i < objList.size(); i++){
+			
+			cg = new CardGrade();
+			
+			cg.setGrade(String.valueOf(objList.get(i)).replace("\r", "").replace("\n", "").replace(" ", ""));
+
+			if(term.equals(String.valueOf(cg.getGrade())) || (term.equals("\r\n" + String.valueOf(cg.getGrade()))) 
+					|| term.equals("\r" + String.valueOf(cg.getGrade())) || term.equals("\n" + String.valueOf(cg.getGrade()))){
+				i++;
+				cg.setCostPerM(Double.valueOf((objList.get(i)).toString()));
+				i++;
+				cg.setActive(Boolean.valueOf((objList.get(i)).toString()));
+				
+				objList = new ArrayList<Object>();
+				objList.add(cg.getGrade());
+				objList.add(cg.getCostPerM());
+				objList.add(cg.getIsActive());
+				
+				return objList;
+				
+			}else{
+				
+				cg.setGrade(String.valueOf(objList.get(i)));
+				//Incrementing to the next grade
+				i+=1;
+			}
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public ArrayList<Object> getList(String path) {
+		File dir = new File(CG_DIR);
+		File myFile = new File(CG_PATH);
+		
+		if(dir.exists() != true){
+			try {
+				
+				dir.mkdirs();
+				myFile.createNewFile();
+			
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		FileOperations fileOps = new FileOperations();
+		
+		return fileOps.readFromFile(CG_DIR, CG_PATH);
+	}
+	
+	@Override
+	public BoxType searchForBoxType(ArrayList<Object> objList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

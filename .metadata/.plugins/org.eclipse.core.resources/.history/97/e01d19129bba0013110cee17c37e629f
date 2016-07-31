@@ -1,0 +1,294 @@
+package customers;
+
+import fileIO.FileOperations;
+import graphicalUserInterface.UserScreen;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class UserClass extends UserScreen{
+	
+	public String USER_PATH = "FlexBox/Users/userInfo.csv";
+	public String DIRECTORY_PATH = "FlexBox/Users";
+	
+	FileOperations fio = new FileOperations();
+	
+	private String firstName;
+	
+	private String lastName;
+	
+	private String address;
+	
+	private String contactNumber;
+	
+	private String username;
+	
+	private String password;
+	
+	private boolean admin;
+	
+	private boolean isActive;
+	
+	//Accessors and mutators
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+	
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean active) {
+		this.isActive = active;
+	}
+	
+	//Constructor
+	public UserClass(){
+		firstName = getFirstName();
+		lastName = getLastName();
+		address = getAddress();
+		contactNumber = getContactNumber();
+		admin = isAdmin();
+		isActive = isActive();
+		validateDefaultUsers();
+	}
+	
+	//Overloaded constructor
+	public UserClass(String firstName, String lastName, String address, String contactNumber, 
+			String username, String password, boolean admin, boolean isActive){
+		
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.contactNumber = contactNumber;
+		this.username = username;
+		this.password = password;
+		this.admin = admin;
+		this.isActive = isActive;		
+	}
+	
+	/**
+	 * This method holds the default users
+	 * @return
+	 */
+	public static ArrayList<UserClass> defaultUsers(){
+		
+		ArrayList<UserClass> defaultUsers = new ArrayList<UserClass>();		
+		
+		defaultUsers.add(new UserClass("First", "User", "FlexBox Ltd","+4412345678", "admin1", "admin123", true, true));
+		defaultUsers.add(new UserClass("Second", "User", "FlexBox Ltd","+4412345678", "admin2", "admin321", true, true));
+		
+		return defaultUsers;
+	}
+	
+	/**
+	 * This method will check whether 
+	 * the default box types were created in the file
+	 * 
+	 * @return ArrayList<Object>
+	 */
+	public ArrayList<Object> validateDefaultUsers(){
+		FileOperations fio = new FileOperations();
+		ArrayList<Object> usersFile = fio.readFromUserFile(DIRECTORY_PATH, USER_PATH);
+		
+		File dir = new File(DIRECTORY_PATH);
+		File path = new File(USER_PATH);
+		
+		if(!dir.isDirectory()){
+			try{
+			dir.mkdirs();
+			}catch(SecurityException e){
+				e.printStackTrace();
+			}
+		}
+		
+		if(path.exists() == false){
+			try {
+				path.createNewFile();
+				fio.writeUserToFile(defaultUsers(), DIRECTORY_PATH, USER_PATH);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(usersFile.size() <=0){
+			fio.writeUserToFile(defaultUsers(), DIRECTORY_PATH, USER_PATH);
+		}
+		
+		usersFile = fio.readFromUserFile(DIRECTORY_PATH, USER_PATH);
+		
+		for(int i=0; i< defaultUsers().size(); i++){
+			
+		if(!(usersFile.contains(defaultUsers().get(i).getUsername())) || !(usersFile.contains(defaultUsers().get(i).getPassword()))){
+			if(usersFile.size() > 0){
+				usersFile.add("\n" + defaultUsers().get(i).getFirstName()+ "," + defaultUsers().get(i).getLastName() + "," + defaultUsers().get(i).getAddress()
+						 + "," + defaultUsers().get(i).getContactNumber() + "," + defaultUsers().get(i).getUsername() + "," + defaultUsers().get(i).getPassword()
+						 + "," + String.valueOf(defaultUsers().get(i).isAdmin()) + "," + String.valueOf(defaultUsers().get(i).isActive()));
+			}else{
+				usersFile.add(defaultUsers().get(i).getFirstName()+ "," + defaultUsers().get(i).getLastName() + "," + defaultUsers().get(i).getAddress()
+						 + "," + defaultUsers().get(i).getContactNumber() + "," + defaultUsers().get(i).getUsername() + "," + defaultUsers().get(i).getPassword()
+						 + "," + String.valueOf(defaultUsers().get(i).isAdmin()) + "," + String.valueOf(defaultUsers().get(i).isActive()));
+			}
+			}else{
+			 //User was found accordingly
+			}
+		}
+		
+		return usersFile;
+	}
+
+	/**
+	 * This method may be used to
+	 * search for a particular user
+	 * 
+	 * @param objList
+	 * @return
+	 */
+	public UserClass searchForUser(ArrayList<Object> objList) {
+		ArrayList<Object> userDetails = new ArrayList<Object>();
+		FileOperations fileOperations = new FileOperations();
+		UserClass currentUser = null;
+		int position = 0;
+		
+		for(int i=4; i<fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).size(); i++){
+			int counter = 0;
+			currentUser = new UserClass();
+			
+			if(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(i).equals(String.valueOf(objList.get(counter)))){			
+				userDetails.add(objList.get(counter));
+				counter++;
+				i++;
+				
+				if(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(i).equals(String.valueOf(objList.get(counter)))){
+					userDetails.add(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(i));
+					userDetails.add(objList.get(counter));
+					
+					position = i - 5;
+					
+					currentUser.setFirstName(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString());
+					position++;
+					currentUser.setLastName(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString());
+					position++;
+					currentUser.setAddress(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString());
+					position++;
+					currentUser.setContactNumber(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString());
+					position++;
+					currentUser.setUsername(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString());
+					position++;
+					currentUser.setPassword(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString());
+					position++;
+					currentUser.setAdmin(Boolean.valueOf(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString()));
+					position++;
+					currentUser.setActive(Boolean.valueOf(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(position).toString()));
+					
+					return currentUser;
+				}
+			}
+			i+=7;
+				}
+		return null;
+	}
+	
+	/**
+	 * Verify if user exists
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public boolean doesUserExist(String username, String password){
+		FileOperations fileOperations = new FileOperations();
+
+		for(int i=4; i < fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).size(); i++){
+		
+			if(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(i).equals(username)){						
+				i++;
+				
+				if(fileOperations.readFromUserFile(DIRECTORY_PATH, USER_PATH).get(i).equals(password)){
+					return true;
+				}else{
+					i+=6;
+				}
+			}else{
+				i+=7;
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Method to add a new user
+	 * 
+	 * @param newUser
+	 */
+	public void addNewUser(UserClass newUser) {
+		ArrayList<Object> currentUsers = fio.readFromUserFile(DIRECTORY_PATH, USER_PATH);
+		
+		if(currentUsers.size() > 0){
+		currentUsers.add("\n" + newUser.getFirstName() + "," + newUser.getLastName() + "," + newUser.getAddress() + "," + newUser.getContactNumber() + "," + 
+				newUser.getUsername() + "," + newUser.getPassword() + "," + String.valueOf(newUser.isAdmin()) + "," + String.valueOf(newUser.isActive()));
+		}else{
+			currentUsers.add(newUser.getFirstName() + "," + newUser.getLastName() + "," + newUser.getAddress() + "," + newUser.getContactNumber() + "," + 
+					newUser.getUsername() + "," + newUser.getPassword() + "," + String.valueOf(newUser.isAdmin()) + "," + String.valueOf(newUser.isActive()));
+		}
+		
+		fio.writeObjListUserToFile(currentUsers, DIRECTORY_PATH, USER_PATH);
+	}
+
+
+	
+}

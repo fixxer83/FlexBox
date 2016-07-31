@@ -1,0 +1,7 @@
+1393279869335	Encapsulate field 'username'
+1393279873511	Encapsulate field 'firstName'
+1393279877457	Encapsulate field 'lastName'
+1393279880589	Encapsulate field 'address'
+1393279884566	Encapsulate field 'dateOfInvoice'
+1393282141877	Rename type 'Stockable'
+1393284805871	Rename field 'generalDimension'

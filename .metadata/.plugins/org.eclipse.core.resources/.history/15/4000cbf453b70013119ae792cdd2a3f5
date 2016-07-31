@@ -1,0 +1,57 @@
+/*package accounts;
+
+import java.util.Date;
+
+public class IndividualInvoice {
+	
+	public String DIRECTORY_PATH = "Accounts/Invoices";
+	
+	private String username;
+	private String firstName;
+	private String lastName;
+	private String address;
+	private Date dateOfInvoice;
+	
+	//Acessors and mutators
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public Date getDateOfInvoice() {
+		return dateOfInvoice;
+	}
+	public void setDateOfInvoice(Date dateOfInvoice) {
+		this.dateOfInvoice = dateOfInvoice;
+	}
+	
+	public IndividualInvoice(){
+		username = getUsername();
+		firstName = getFirstName();
+		lastName = getLastName();
+		address = getAddress();
+		dateOfInvoice = getDateOfInvoice();
+	}
+	
+
+}
+*/
